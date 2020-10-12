@@ -65,6 +65,10 @@ $(document).ready(function(){
             var cop = $('.matrix div:last-child').clone();
             cop.attr("id", col);
             cop.children().first().html(col+1);
+            cop.children().each(function(index){
+                if(index != 0){
+                    $(this).css("background","#8C8881")}
+            });
             $('.matrix').append(cop);
             
             
