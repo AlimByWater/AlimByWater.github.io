@@ -57,7 +57,7 @@ header >  p{
   position: fixed;
   top: 16%;
   left: 5%;
-  width: 33%; height: 100%;
+  width: 38vw; height: 100vh;
 }
 .matrix{
   position: absolute;
@@ -72,14 +72,14 @@ header >  p{
   color: #A63333;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
-  font-size: 1vw;
+  font-size: 0.7vw;
   text-align: center;
 
   position: sticky;
   left: -0.2vw;
-  margin:0.5vw 0.5vw;
-  width: 1vw;
-  height: 1vw;
+  margin:0.1vw 0.1vw;
+  width: 0.9vw;
+  height: 1.8vh;
   background-color:#8C8881 ;
   border:none;
   outline: none;
@@ -107,14 +107,14 @@ header >  p{
 
 hr {
   position: absolute;
-  width: 100%;
+  width: 32.4vw;
   margin:0;
   top:5%;
 }
 
 .add_btn{
   transition: all 0.3s ease-in-out;
- 
+  
   width: 23%; height: 3%;
   text-align: center;
   text-decoration: none;
@@ -124,12 +124,11 @@ hr {
   border:none;
   outline: none;
   position: relative;
-
+  
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
   font-size: min(2vh,1vw);
   box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.2);
-
 }
 .add_btn:active{
   opacity: 1;
@@ -137,22 +136,60 @@ hr {
   box-shadow: inset 8px 8px 16px rgba(0, 0, 0, 0.1);
   color: #403E3B;
   border:none;
-
+  
 }
 .add_btn:hover{
   box-shadow: 6px 6px 10px rgba(202, 152, 152, 0.2);
-  width: 26%; height:4%;
+  height:4%;
   transition: 0.1s ease-in-out;
 }
 
+.complement{
+  transition: all 0.3s ease-in-out;
+  left: 21.5%;
+  
+  width: 30%; height: 3%;
+  text-align: center;
+  text-decoration: none;
+ 
+  color : black;
+  background: #F2F2F2;
+  border:none;
+  outline: none;
+  position: relative;
+  
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: min(1.6vh,0.8vw);
+  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.complement:hover{
+  box-shadow: 6px 6px 10px rgba(202, 152, 152, 0.2);
+  height:4%;
+  transition: 0.1s ease-in-out;
+}
+.complement:active{
+  opacity: 1;
+  font-weight: 400;
+  box-shadow: inset 8px 8px 16px rgba(0, 0, 0, 0.1);
+  color: #403E3B;
+  border:none;
+  
+}
 #overflow{
-  position: absolute;
-  left: 10vw;
-  letter-spacing: 0.vw;
+  top: 0.5vh;
+  left: 4vw;
+  position: relative;
+  display: inline-block;
+  
+  
+  letter-spacing: 0.1vw;
   color:#A63333;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
-  font-size: 2em;
+  
+  font-size: min(4vh,2vw);
   visibility: hidden;
   opacity: 0;
   
@@ -203,4 +240,40 @@ hr {
   0%{opacity: 1;}
   50%{opacity: 0.5;}
   100%{opacity: 0;}
+}
+
+.tooltip {
+  float: right;
+  right: 17.5vw; top: min(1.8vh,1.5vw);
+  position: relative;
+  display: inline-block;
+  border:2vw;
+}
+#my_image {
+  width: 1.1vw;
+  height: auto;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 15vw;
+  background-color: white;
+  color: black;
+  font-size: small;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 250%;
+  margin-left: -60px;
+  
+  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }

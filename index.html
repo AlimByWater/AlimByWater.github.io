@@ -19,7 +19,7 @@
     <span>Graph Vizualization</span>
     <p style="white-space: pre-line">You can vizualize graph via adjency matrix.
       By settings, it would be undirected <em>multigraph</em>. It allows loops and verteciec w/o connections,
-       also might be a null graph.The maximum number of vertices was hardcoded by my and equal to 10 due to some problems with responsiveness issues(actually because my frontend skills sucks).
+       also might be a null graph.The maximum number of vertices was hardcoded by me and equal to 20 due to some problems with responsiveness issues(actually because my frontend skills sucks).
     </p>
     
   </header>
@@ -27,7 +27,10 @@
   <body>
     
     <div class = "interface">
-      <button class="add_btn">Add Vertex</button><label for="add_btn" id="overflow">Max</label>
+      <button class="add_btn">Add Vertex</button><label for="add_btn" id="overflow">Max</label><div class="tooltip">
+        <img id="my_image" src="quest_mark.png" alt="image error">
+        <span class="tooltiptext">Two edges in complemented graph are connected only if <i>they don't have any connections in initial graph.</i> It is assumed that each pair of vertices in initial graph has 0 or 1 connections maximum</span>
+      </div><button class="complement">Switch to complement graph</button>
       <hr>      
       <form class ="matrix">
         
@@ -44,82 +47,81 @@
         // настр для vis.js
         var nodes = new vis.DataSet();
         var edges = new vis.DataSet();
+        var complement_edges = new vis.DataSet();
+
         var container = document.getElementById("viz");
         var data = {nodes: nodes, edges:edges};
-
-            //настройки для отображения графа
-        var options = {
-            width:"100%",
-            interaction:{hover:true},
-            nodes:{
-                shape:'circle', 
-                color:{background:'#A63333',highlight:"#A63333", hover:{background:'#730220'}},
-                borderWidth: 0, borderWidthSelected: 4, font:{size:20 , color:"#D9BD9C", }, margin:10
-            },
-            edges:{
-                color: "#AFBFAA"
-            },
-            physics: {
-                forceAtlas2Based: {
-                  gravitationalConstant: -46,
-                  centralGravity: 0.01,
-                  springLength: 130,
-                  springConstant: 0.05,
-                  damping:0.5,
-                },
-                maxVelocity: 100,
-                solver: "forceAtlas2Based",
-                timestep: 0.5,
-                stabilization: {updateInterval:100,iterations: 5000 },
-              },
-              autoResize: true,
-        };
-
-        var network = new vis.Network(container, data, options);
         
-
+        var network = new vis.Network(container, data, {});
+        
         //Функция, которая вызывается при изменении поля инпут
-        function onch(id,value){      // id = 20  excp = 02 ----     21
+        function onch(id,value){      // 
           
-            id1 = parseInt(id[0], 10);
-            id2 = parseInt(id[1], 10);
-          
+          id1 = parseInt(id.slice(0,2), 10);
+          id2 = parseInt(id.slice(2), 10);
+      
           //количество ребер соединенных с вершино id  
           len = network.getConnectedEdges((id1+1)).length; 
 
           // если вводим значение больше нуля
-          if (value > 0){
-            for(var i=1;i<=value; i++){
+          if (parseInt(value,10) > 0){
+            for(var i=1; i<=parseInt(value,10); i++){
               var id_of_edge = ""+id+""+i;  //создаем id для ребра
-              if (!edges.get(id_of_edge)){  // проверяем, нет ли уже такого ребра
-                edges.add([{id:id_of_edge,from:id1+1, to:id2+1}]);
+              var id_of_simmetric = ""+id.slice(2)+id.slice(0,2)+""+i;  //создаем id для ребра
+     
+              if (!edges.get(id_of_edge) && !(edges.get(id_of_simmetric))){  // проверяем, нет ли уже такого ребра
+                edges.add([{id:id_of_edge,from:(id1+1), to:(id2+1)}]);
               }
-              else if (len > value){        // если введенное число меньше, чем количество
-                for(var j=value;j <=len+1;j++){ // уже существующих ребер 
-                  var i_to_remove = ""+id+""+j; // то удаляем их
-                  data.edges.remove([i_to_remove]);
+              else if (len > parseInt(value,10)){        // если введенное число меньше, чем количество
+                for(var j=parseInt(value,10)+1; j <= len; j++){ // уже существующих ребер 
+                  var i_to_remove = ""+id+""+j;  // то удаляем их
+                  var i_simmetric_to_remove = ""+id.slice(2)+id.slice(0,2)+j; // и симметричную тоже
+                  edges.remove([i_to_remove]);
+                  edges.remove([i_simmetric_to_remove]);
                 };
               };          
             }
-            $('#'+id2+''+id1).val(value); // выставляем в симметричной ячейке такое же значение
-          //тут обрабатываем случай, когда ввели ноль или все затерли(что-то по сути тоже самое)
+            $('#'+id.slice(2)+''+id.slice(0,2)).val(value); // выставляем в симметричной ячейке такое же значение
+
+            // удаляем из дополнения графа ненужное ребро
+            if (id1 < 10) {id1_a = "0"+(id1+1)}
+            else {id1_a = ""+(id1+1)};
+
+            if (id2 < 10) {id2_a = "0" + (id2+1)}
+            else {id2_a = "" + (id2+1) };
+            
+            complement_edges.remove((id1_a+id2_a));
+            complement_edges.remove((id2_a+id1_a));
+            
+            //тут обрабатываем случай, когда ввели ноль или все затерли(что-то по сути тоже самое)
           }else if (value == 0 || value == ""){
-            $("#"+id2+""+id1).val("");
+            $('#'+id.slice(2)+''+id.slice(0,2)).val("");
             for(var i=1; i <=len; i++){
               var i_to_remove = ""+id+""+i;
-              data.edges.remove([i_to_remove]);
+              var i_simmetric_to_remove = ""+id.slice(2)+id.slice(0,2)+i; // и симметричную тоже
+              edges.remove([i_to_remove]);
+              edges.remove([i_simmetric_to_remove]);
             };
             $("#"+id).val("");
+            
+            if (id1 < 10) {id1_a = "0"+(id1+1)}
+            else {id1_a = ""+(id1+1)};
+
+            if (id2 < 10) {id2_a = "0" + (id2+1)}
+            else {id2_a = "" + (id2+1) };
+            
+            complement_edges.add([{id:id1_a+id2_a, from:(id1+1), to: (id2+1)}]);
           };
           
           if ($("#"+id).val()>0){
             $("#"+id).css({"background":"#A63333", "color":"white"});
-            $('#'+id2+''+id1).css({"background":"#A63333","color":"white"});
+            $('#'+id.slice(2)+''+id.slice(0,2)).css({"background":"#A63333","color":"white"});
           };
           if ($("#"+id).val() == 0){
             $("#"+id).css({"background":"#8C8881", "color":"#A63333"});
-            $('#'+id2+''+id1).css({"background":"#8C8881","color":"#A63333"});
+            $('#'+id.slice(2)+''+id.slice(0,2)).css({"background":"#8C8881","color":"#A63333"});
           };
+
 
         };
   </script>
