@@ -196,6 +196,7 @@ hr {
   animation: oo 3s ease-in-out;
 }
 
+/* Vis.js container */
 #viz {
     z-index: 1;
     position: fixed;
