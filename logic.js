@@ -5,13 +5,6 @@
 
 
 $(document).ready(function(){
-
-    // отключаем сразу анимацию для бокса
-    // чтобы запустить ее, только тогда, когда будет хотя бы одна вершина
-    var viz = document.getElementById("viz");
-    viz.style.animationPlayState="paused";
-    var max_overflow = document.getElementById("overflow");
-    max_overflow.style.animationPlayState = "paused";
     col = $('.matrix').children().length;
 
     // настройки для отображения графа
